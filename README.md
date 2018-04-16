@@ -1,20 +1,29 @@
 # Charter Enterprise MOTD Sample Project
-A small project to help assess candidate experience with webservices and our technology stack.
+A small project that allows users to get, set, and reset a general charter maintanance message.
 
-## Instructions
-We have provided a webservice that provides a "message of the day", similar to what you might see logging into a 
-Unix system. Unfortuantely, at Charter things don't always go as planned and we need to change the message.  We need you
- to add the abilty to change the 
-message.  No message history or any other advanced functionality is needed, unless there is something you'd like to show
-off.  The message can be stored in the service using any mechanism you like, but aim for simplicity.  A persistent store
-like MySQL or Hypersonic could be overkill for this new requirement.  Iterative 
-requests for the MOTD should return the new message, if it has been changed.
-Be sure to edit this README.md so we understand what you've done.
+## How to Use:
 
-Also, a rogue developer has left the code base broken.  To get anything done, you're doing to have to fix the tests first!
-And, no, -DskipTests is not a solution!
+This application accepts the following REST requests:
 
-Push your answer to this Github repo as a feature branch and create a pull request so we know you're done.
+Get:
+	- Path: "/"
+	- Result: The currently set maintenance message for the application.
+
+Put:
+	- Path: "/"
+	- Param:
+		String message: the new message to be returned by the application. If the value "reset" is used in the message, the message reverts to the default message. Parameter cannot be null or empty. 
+	- Result: 
+		200: The message has been set or reset successfully.
+		400: Message cannot be null or empty.
+
+## Changes Made:
+
+- Controller stores the message to be output in a private variable called Motd. Original message is stored as a constant called DEFAULT_MESSAGE. Motd is set to DEFAULT_MESSAFE initially.
+
+- Added PUT mapping that allows the user to specify a custom message to be returned by the application on get requests. If the message equals the value "reset", then the Motd variable is set back to DEFAULT_MESSAGE. Added error handling case for null and empty message strings
+- REST methods return ResponseEntities<String> instead of Strings so appropriate HTTP statuses can be returned.
+- Fixed unit tests and added more unit tests to test additional cases expalined above.
 
 ### Getting Started
 * To compile
@@ -34,10 +43,3 @@ Push your answer to this Github repo as a feature branch and create a pull reque
 ### Deployment
 If you whiz through this sample, try adding a deployment.   We are a Docker and AWS shop.  Getting something into an
 AWS or Heroku, or whatever you're comfortable with will be an "A+"
-
-### Project hints and questions
-* Stuck getting started?
-  * The official Spring Boot "hello world" example is a great starting point.
-* Still need help?
-  * Further hints are available, Feel free to ask questions here.  Edit this file in your branch by adding to the 
-questions section, push it, and we will update the file with answers. 
